@@ -25,17 +25,21 @@ def ask():
             res_yes = True
         elif coffee == "report":
             report()
+        elif coffee == "off":
+            off()
     return need_resources
 
 
 # TODO: 2. Turn off the Coffee Machine by entering “off” to the prompt.
-is_off = False
+def off():
+    sys.exit()
 
 
 # TODO: 3. Print report.
 def report():
-    for key, value in resources.items():
-        print(f"{key.capitalize()}: {value}")
+        print(f"Water: {machine_water}")
+        print(f"Coffee: {machine_coffee}")
+        print(f"Milk: {machine_milk}")
 
 
 # TODO: 4. Check resources sufficient?
@@ -86,7 +90,11 @@ def def_res():
     return [need_water, need_coffee, need_milk, need_cost]
 
 
-def play(water, coffee, milk):
+def play():
+    global machine_water
+    global machine_milk
+    global machine_coffee
+
     res = def_res()
 
     can_do = check_res(res[0], res[1], res[2], )
@@ -95,16 +103,16 @@ def play(water, coffee, milk):
         process_coin = process_coins()
         cook = is_trans_succ(process_coin, res[3])
         if cook:
-            new_water = water - res[0]
-            new_coffee = coffee - res[1]
-            new_milk = milk - res[2]
             print("Here is your latte ☕️. Enjoy!")
-            print(f"{new_water}, {new_coffee}, {new_milk}")
-            play(new_water, new_coffee, new_milk)
+            machine_water -= res[0]
+            machine_coffee -= res[1]
+            machine_milk -= res[2]
+            report()
+            play()
         else:
-            play(water, coffee, milk)
+            play()
     else:
-        play(water, coffee, milk)
+        play()
 
 
-play(machine_water, machine_coffee, machine_milk)
+play()
